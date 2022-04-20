@@ -1,0 +1,38 @@
+- hosts: all
+  tasks:
+  - name: Install packages to the server
+    become: true
+    become_user: root
+    shell: yum install vim-enhanced net-snmp-utlis  net-tools net-snmp epel-release -y
+    shell: sleep 10
+  - name:  Install and Start snmpd services
+    shell: mv /etc/snmp/snmpd.conf /etc/snmp/snmpd.conf-bkp
+    shell: sleep 10
+    shell: touch /etc/snmp/snmpd.conf
+    shell: chown root:root /etc/snmp/snmpd.conf
+    shell: chmod 400 /etc/snmp/snmpd.conf
+    shell: echo "trap2sink 172.25.3.75 4ristocr4tro" >> /etc/snmp/snmpd.conf
+    shell: sleep 2
+    shell: echo "rocommunity 4ristocr4tro" >> /etc/snmp/snmpd.conf
+    shell: systemctl start snmpd
+    shell: systemctl enable snmpd
+
+  - name: Install mlocate package
+    shell: yum install mlocate -y
+    shell: updatedb
+    shell:  sleep 20
+
+  - name:  change selinux status
+    shell: setenforce 0
+    shell: sed -i 's/SELINUX=enforcing/SELINUX=disabled/g' /etc/sysconfig/selinux
+    shell: systemctl stop firewalld
+    shell: systemctl enable firewalld
+
+  - name: Disable root login
+    shell: echo "PermitRootLogin no" >> /etc/ssh/sshd_config
+
+  - name: Restart ssh service
+    shell: service sshd restart
+
+ # - name: Update the linux server
+ #   shell: sleep 30 && yum update -y
