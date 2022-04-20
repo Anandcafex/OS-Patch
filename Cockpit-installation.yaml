@@ -1,0 +1,12 @@
+- hosts: all
+  become: true
+  tasks:
+      - name: install cockpit
+        yum:
+                name: cockpit
+                state: latest
+      - name: service start
+        service:
+                name: cockpit
+                state: started
+                enabled: yes
