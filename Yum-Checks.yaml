@@ -1,0 +1,17 @@
+- hosts: all
+  gather_facts: yes
+  tasks:
+    - name: check yum working by install lynx package
+      yum:
+        name: lynx
+        state: present
+        update_cache: True
+
+  tasks:
+ #   - name: Run yum check updates
+
+    - shell: yum check-update | wc -l
+      register: shell_result
+
+    - debug:
+       var: shell_result.stdout_lines
