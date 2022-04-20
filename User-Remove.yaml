@@ -1,0 +1,21 @@
+- hosts: all
+  gather_facts: false
+  become: true
+  vars:
+    user_names:
+      - 'pb104382'
+      - 'as103249'
+      - 'elliott'
+      - 'vs101874'
+      - 'am103386'
+      - 'ah105260'
+      - 'kumarpa'
+      - 'sk101619'
+
+  tasks:
+    - name: Remove Users
+      user:
+        name: '{{ item }}'
+        state: absent
+        remove: yes
+      loop: "{{ user_names }}"
