@@ -1,0 +1,35 @@
+- hosts: all
+  vars:
+        password: "Provide input"
+  tasks:
+        - name: create user
+          user:
+                name: "{{ item }}"
+                state: present
+                password: "{{ password | password_hash('sha512') }}"
+          loop:
+                - svc-p-pam-fa-linux
+
+        - name: create sudoers file in centos 6
+          copy:
+                dest: "/etc/sudoers.d/svc-p-pam-fa-linux"
+                src: "svc-p-pam-fa-linux.cos6"
+                mode: '0440'
+                validate: /usr/sbin/visudo -csf %s
+          when: ansible_distribution == "CentOS" and ansible_distribution_major_version == "6"
+
+        - name: create sudoers file in Centos 7
+          copy:
+                dest: "/etc/sudoers.d/svc-p-pam-fa-linux"
+                src: "svc-p-pam-fa-linux.cos7"
+                mode: '0440'
+                validate: /usr/sbin/visudo -csf %s
+          when: ansible_distribution == "CentOS" and ansible_distribution_major_version == "7"
+
+ #       - name: create sudoers file in Ubuntu
+ #         copy:
+ #               dest: "/etc/sudoers.d/svc-p-pam-fa-linux"
+ #               src: "svc-p-pam-fa-linux.ubuntu"
+ #               mode: '0440'
+ #               validate: /usr/sbin/visudo -csf %s
+ #         when: ansible_distribution == "Ubuntu"
