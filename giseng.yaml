@@ -1,0 +1,27 @@
+- hosts: all
+  vars:
+        password: "PASSWORD"
+  tasks:
+        - name: create user
+          user:
+                name: "{{ item }}"
+                state: present
+                password: "{{ password | password_hash('sha512') }}"
+          loop:
+                - svc-p-pam-fa-linux
+        - name: create sudoers file in centos 7
+          copy:
+                dest: "/etc/sudoers.d/{{ item }}"
+                content: "{{ item }} ALL=(ALL)  NOPASSWD: /usr/bin/passwd, /bin/grep, /bin/sed, /usr/bin/tee, /bin/rm"
+          loop:
+                - svc-p-pam-fa-linux
+          when: (ansible_distribution == "CentOS" and ansible_distribution_major_version = "7")
+
+
+        - name: create sudoers file in Centos 6
+          copy:
+                dest: "/etc/sudoers.d/{{ item }}"
+                content: "{{ item }} ALL=(ALL)  NOPASSWD: /usr/bin/passwd, /usr/bin/grep, /usr/bin/sed, /usr/bin/tee, /usr/bin/rm"
+          loop:
+                - svc-p-pam-fa-linux
+          when: (ansible_distribution == "CentOS" and ansible_distribution_major_version = "6")
