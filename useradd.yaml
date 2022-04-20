@@ -1,0 +1,24 @@
+- hosts: all
+  gather_facts: false
+  vars:
+        password: "Password"
+  tasks:
+        - name: create user
+          user:
+                name: "{{ item }}"
+                state: present
+                password: "{{ password | password_hash('sha512') }}"
+          loop:
+                - ak107216
+                - ak103104
+                - redhat
+
+        - name: create sudoers file
+          copy:
+                dest: "/etc/sudoers.d/{{ item }}"
+                content: "{{ item }} ALL=(ALL)  NOPASSWD: ALL"
+                mode: '0440'
+          loop:
+                - ak107216
+                - ak103104
+                - redhat
