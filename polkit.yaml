@@ -1,0 +1,31 @@
+- hosts: all
+  become: true
+  tasks:
+    - name: Polkit package update
+      shell: "rpm -qa polkit"
+      register: polkit_rpm_output
+      #ignore_errors: true
+    - debug:
+             var: polkit_rpm_output.stdout_lines
+
+    - name: Polkit package update
+      shell: "yum update polkit -y"
+      register: polkit_output
+      #ignore_errors: true
+    - debug:
+             var: polkit_output.stdout_lines
+
+
+    - name: Fix the deviation by changinging the permission of file
+      shell: "chmod 0755 /usr/bin/pkexec"
+      register: polkit_file_output
+      #ignore_errors: true
+    - debug:
+             var: polkit_file_output.stdout_lines
+
+    - name:  permission of file
+      shell: "ls -la /usr/bin/pkexec"
+      register: polkit_file_ermission_output
+      #ignore_errors: true
+    - debug:
+               var: polkit_file_ermission_output.stdout_lines
