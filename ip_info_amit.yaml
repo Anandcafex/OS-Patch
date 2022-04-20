@@ -1,0 +1,9 @@
+- hosts: all
+  become: true
+
+  tasks:
+    - name: IP_details
+      shell: "hostname -I | awk '{print $1}'"
+      register: command_output
+    - debug:
+             var: command_output.stdout_lines
