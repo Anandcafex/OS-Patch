@@ -1,0 +1,34 @@
+- hosts: all
+  become: true
+  tasks:
+    - name: Current timezone on machine
+      shell: "timedatectl"
+      register: time_date_output
+      #ignore_errors: true
+    - debug:
+             var: time_date_output.stdout_lines
+
+    - name: Update timezone on server
+      shell: "timedatectl set-timezone America/Toronto"
+      register: time_date_output
+      #ignore_errors: true
+    - debug:
+             var: time_date_output.stdout_lines
+
+
+
+    - name:  Restart chrony
+      shell: "service chrony restart"
+      register: time_date_output
+      #ignore_errors: true
+    - debug:
+             var: time_date_output.stdout_lines
+
+
+    - name:  Updated time zone
+      shell: "timedatectl"
+      register: time_date_output
+      #ignore_errors: true
+    - debug:
+             var: time_date_output.stdout_lines
+
