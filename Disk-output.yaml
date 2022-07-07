@@ -1,0 +1,9 @@
+- hosts: all
+  become: true
+
+  tasks:
+    - name: space__details
+      shell: "df -hP |grep -i /"
+      register: command_output
+    - debug:
+             var: command_output.stdout_lines
