@@ -1,6 +1,6 @@
 - hosts: all
   vars:
-        password: "Provide input"
+        password: "password"
   tasks:
         - name: create user
           user:
