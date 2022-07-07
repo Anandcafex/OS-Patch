@@ -1,0 +1,11 @@
+- hosts: all
+  become: true
+
+  tasks:
+    - name: host entry
+      shell: echo "172.28.2.118 delc-lxmbg-01 delc-lxmbg-01.dev.local" >> /etc/hosts
+      register: command_output
+    - debug:
+             var: command_output.stdout_lines
+    - name: Service_restart
+      shell: /etc/init.d/besclient restart
